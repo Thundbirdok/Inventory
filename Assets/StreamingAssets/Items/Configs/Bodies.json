@@ -1,0 +1,14 @@
+[
+  {
+    "id": 5,
+    "iconName": "Jacket",
+    "defence": 3,
+    "weight": 1
+  },
+  {
+    "id": 6,
+    "iconName": "BodyArmor",
+    "defence": 10,
+    "weight": 10
+  }
+]

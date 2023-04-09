@@ -1,0 +1,16 @@
+[
+  {
+    "id": 3,
+    "iconName": "Pistol",
+    "BulletsId": 1,
+    "Damage": 10,
+    "Weight": 1
+  },
+  {
+    "id": 4,
+    "iconName": "AK47",
+    "BulletsId": 2,
+    "Damage": 20,
+    "Weight": 5
+  }
+]
