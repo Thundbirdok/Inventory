@@ -970,6 +970,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   storageSize: 15
+  saver:
+    jsonFileName: InventorySave
 --- !u!1 &655892686
 GameObject:
   m_ObjectHideFlags: 0

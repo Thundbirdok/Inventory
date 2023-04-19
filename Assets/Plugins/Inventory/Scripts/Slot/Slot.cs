@@ -1,13 +1,18 @@
 namespace Plugins.Inventory.Scripts.Slot
 {
     using System;
+    using Newtonsoft.Json;
 
+    [Serializable]
+    
     public class Slot : IEquatable<Slot>, IEquatable<int>
     {
         public event Action OnAmountChanged;
-        
-        public int ItemId;
 
+        [JsonProperty("itemId")]
+        public int itemId;
+
+        [JsonProperty("amount")]
         private int _amount;
         public int Amount
         {
@@ -41,12 +46,12 @@ namespace Plugins.Inventory.Scripts.Slot
                 return true;
             }
 
-            return Equals(ItemId, other.ItemId);
+            return Equals(itemId, other.itemId);
         }
 
         public bool Equals(int other)
         {
-            return Equals(ItemId, other);
+            return Equals(itemId, other);
         }
         
         public override bool Equals(object obj)
@@ -66,7 +71,7 @@ namespace Plugins.Inventory.Scripts.Slot
                 return Equals((Slot)obj);
             }
 
-            if (obj.GetType() == ItemId.GetType())
+            if (obj.GetType() == itemId.GetType())
             {
                 return Equals((int)obj);
             }
@@ -74,6 +79,6 @@ namespace Plugins.Inventory.Scripts.Slot
             return false;
         }
 
-        public override int GetHashCode() => ItemId;
+        public override int GetHashCode() => itemId;
     }
 }

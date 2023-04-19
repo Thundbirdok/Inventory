@@ -3,40 +3,46 @@ namespace Plugins.Inventory.Scripts.Storages
     using System;
     using System.Collections;
     using System.Collections.Generic;
+    using Newtonsoft.Json;
     using Plugins.Inventory.Scripts.Item;
     using Plugins.Inventory.Scripts.Item.ItemInterfaces;
     using Plugins.Inventory.Scripts.Slot;
     using UnityEngine;
-
+    
     public class ItemsSlotsStorage : IEnumerable<Slot>
     {
         public event Action<int> OnSlotAdded;
         public event Action<Slot> OnSlotRemoved;
 
-        public int Count => _slots.Count;
+        public int Count => Slots.Count;
+        
         public int MaxAmount { get; private set; }
-
         
         private readonly ItemsTypesHandler<IItem> _typesHandler;
+        
+        public List<Slot> Slots { get; }
 
-        private readonly List<Slot> _slots;
-
-        public ItemsSlotsStorage(int maxAmount, ItemsTypesHandler<IItem> typesHandler)
+        public ItemsSlotsStorage
+        (
+            int maxAmount, 
+            List<Slot> slots,
+            ItemsTypesHandler<IItem> typesHandler
+        )
         {
             _typesHandler = typesHandler;
             MaxAmount = maxAmount;
 
-            _slots = new List<Slot>(maxAmount);
+            Slots = slots ?? new List<Slot>(maxAmount);
         }
 
         public IEnumerator<Slot> GetEnumerator()
         {
-            return (_slots as IEnumerable<Slot>).GetEnumerator();
+            return (Slots as IEnumerable<Slot>).GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
-        public Slot this[int index] => _slots[index];
+        public Slot this[int index] => Slots[index];
 
         public void ChangeMaxAmount(int maxCapacity)
         {
@@ -47,9 +53,9 @@ namespace Plugins.Inventory.Scripts.Storages
             
             MaxAmount = maxCapacity;
 
-            for (var i = _slots.Count - 1; i >= MaxAmount; i--)
+            for (var i = Slots.Count - 1; i >= MaxAmount; i--)
             {
-                _slots.RemoveAt(i);
+                Slots.RemoveAt(i);
             }
         }
 
@@ -75,22 +81,22 @@ namespace Plugins.Inventory.Scripts.Storages
                 return false;
             }
             
-            for (var i = _slots.Count - 1; i >= 0; i--)
+            for (var i = Slots.Count - 1; i >= 0; i--)
             {
-                if (_slots[i].ItemId != itemId)
+                if (Slots[i].itemId != itemId)
                 {
                     continue;
                 }
 
-                if (amount < _slots[i].Amount)
+                if (amount < Slots[i].Amount)
                 {
-                    _slots[i].Amount -= amount;
+                    Slots[i].Amount -= amount;
 
                     return true;
                 }
 
-                var newSlotAmount = Mathf.Max(_slots[i].Amount - amount, 0);
-                var newAmount = Mathf.Max(amount - _slots[i].Amount, 0);
+                var newSlotAmount = Mathf.Max(Slots[i].Amount - amount, 0);
+                var newAmount = Mathf.Max(amount - Slots[i].Amount, 0);
                 
                 if (newSlotAmount == 0)
                 {
@@ -98,7 +104,7 @@ namespace Plugins.Inventory.Scripts.Storages
                 }
                 else
                 {
-                    _slots[i].Amount = newSlotAmount;
+                    Slots[i].Amount = newSlotAmount;
                 }
 
                 if (newAmount == 0)
@@ -119,14 +125,14 @@ namespace Plugins.Inventory.Scripts.Storages
         {
             var amount = 0;
             
-            for (var i = _slots.Count - 1; i >= 0; i--)
+            for (var i = Slots.Count - 1; i >= 0; i--)
             {
-                if (_slots[i].ItemId != itemId)
+                if (Slots[i].itemId != itemId)
                 {
                     continue;
                 }
 
-                amount += _slots[i].Amount;
+                amount += Slots[i].Amount;
             }
 
             return amount;
@@ -134,45 +140,54 @@ namespace Plugins.Inventory.Scripts.Storages
 
         public void RemoveAt(int index)
         {
-            var slot = _slots[index];
+            var slot = Slots[index];
             
-            _slots.RemoveAt(index);
+            Slots.RemoveAt(index);
 
             OnSlotRemoved?.Invoke(slot);
+        }
+
+        public ItemSlotsStorageJson ToJsonData()
+        {
+            return new ItemSlotsStorageJson()
+            {
+                maxAmount = MaxAmount,
+                slots = Slots
+            };
         }
         
         private bool TryAddToNewSlot(int itemId, ref int amount)
         {
-            if (_slots.Count >= MaxAmount)
+            if (Slots.Count >= MaxAmount)
             {
                 return false;
             }
 
             var slot = new Slot()
             {
-                ItemId = itemId,
+                itemId = itemId,
                 Amount = amount
             };
             
-            _slots.Add(slot);
+            Slots.Add(slot);
 
-            OnSlotAdded?.Invoke(_slots.Count - 1);
+            OnSlotAdded?.Invoke(Slots.Count - 1);
             
             return true;
         }
 
         private bool TryAddToSlotsWithSameItem(int itemId, ref int amount)
         {
-            for (var i = 0; i < _slots.Count; i++)
+            for (var i = 0; i < Slots.Count; i++)
             {
-                var itemIndex = _slots[i].ItemId;
+                var itemIndex = Slots[i].itemId;
 
                 if (itemIndex.Equals(itemId) == false)
                 {
                     continue;
                 }
 
-                if (TryAddAmountToSlot(itemId, ref amount, _slots[i]))
+                if (TryAddAmountToSlot(itemId, ref amount, Slots[i]))
                 {
                     return true;
                 }
@@ -229,5 +244,16 @@ namespace Plugins.Inventory.Scripts.Storages
 
             return false;
         }
+    }
+
+    [Serializable]
+    [JsonObject(MemberSerialization.OptIn)]
+    public class ItemSlotsStorageJson
+    {
+        [JsonProperty("MaxAmount")]
+        public int maxAmount;
+
+        [JsonProperty("Slots")]
+        public List<Slot> slots;
     }
 }

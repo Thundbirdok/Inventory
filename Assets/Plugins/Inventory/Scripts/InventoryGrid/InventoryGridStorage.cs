@@ -1,7 +1,6 @@
 namespace Plugins.Inventory.Scripts.InventoryGrid
 {
     using System;
-    using System.Collections.Generic;
     using Plugins.Inventory.Scripts.Item;
     using Plugins.Inventory.Scripts.Item.ItemInterfaces;
     using Plugins.Inventory.Scripts.Slot;
@@ -13,8 +12,6 @@ namespace Plugins.Inventory.Scripts.InventoryGrid
     {
         public ItemsSlotsStorage Storage { get; private set; }
 
-        public List<SlotProvider> Slots => spawner.Slots;
-        
         [SerializeField]
         private InventorySlotsSpawner spawner;
 
@@ -27,13 +24,15 @@ namespace Plugins.Inventory.Scripts.InventoryGrid
             
             spawner.Init(storage);
 
-            Storage.OnSlotAdded += SlotAdded;
+            SetSlots();
+
+            Storage.OnSlotAdded += AddNewSlot;
             Storage.OnSlotRemoved += SlotRemoved;
         }
 
         public void Dispose()
         {
-            Storage.OnSlotAdded -= SlotAdded;
+            Storage.OnSlotAdded -= AddNewSlot;
             Storage.OnSlotRemoved -= SlotRemoved;
         }
 
@@ -51,7 +50,15 @@ namespace Plugins.Inventory.Scripts.InventoryGrid
             return Storage.Spend(itemId, amount);
         }
 
-        private void SlotAdded(int slotIndex)
+        private void SetSlots()
+        {
+            for (var i = 0; i < Storage.Count; i++)
+            {
+                AddNewSlot(i);
+            }
+        }
+
+        private void AddNewSlot(int slotIndex)
         {
             for (var i = 0; i < spawner.Slots.Count; i++)
             {
@@ -70,7 +77,7 @@ namespace Plugins.Inventory.Scripts.InventoryGrid
         {
             Sprite icon = null;
                 
-            if (_typesHandler.Items.TryGetValue(slot.ItemId, out var item))
+            if (_typesHandler.Items.TryGetValue(slot.itemId, out var item))
             {
                 if (item is IItemWithIcon itemWithIcon)
                 {

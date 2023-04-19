@@ -46,10 +46,8 @@ namespace Plugins.Inventory.Scripts.InventoryGrid
                 poolDefaultCapacity,
                 poolMaxSize
             );
-            
-            _storage.ChangeMaxAmount(addAmount);
-            
-            InstantiateSlots(addAmount * 2);
+
+            InstantiateSlots(storage.MaxAmount + addAmount);
             ActivateSlots();
         }
 
