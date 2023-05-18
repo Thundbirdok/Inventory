@@ -4,4 +4,9 @@ namespace Plugins.Inventory.Scripts.Item.ItemInterfaces
     {
         public int MaxAmount { get; }
     }
+    
+    public interface IJsonLimitedStackItem
+    {
+        public int MaxAmount { get; set; }
+    }
 }

@@ -6,4 +6,9 @@ namespace Plugins.Inventory.Scripts.Item.ItemInterfaces
     {
         public float Weight { get; }
     }
+    
+    public interface IJsonItemWithWeight
+    {
+        public float Weight { get; set; }
+    }
 }

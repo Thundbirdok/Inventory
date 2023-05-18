@@ -8,4 +8,11 @@ namespace Plugins.Inventory.Scripts.Item.ItemInterfaces
         
         public int BulletsId { get; }
     }
+    
+    public interface IJsonWeaponItem
+    {
+        public int Damage { get; set; }
+        
+        public int BulletsId { get; set; }
+    }
 }

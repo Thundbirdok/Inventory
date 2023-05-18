@@ -2,7 +2,6 @@ using Zenject;
 
 namespace Plugins.Inventory.Scripts.Item
 {
-    using System;
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
@@ -56,26 +55,26 @@ namespace Plugins.Inventory.Scripts.Item
             Container.Bind<ItemsTypesHandler<IItem>>().FromInstance(handler).AsCached();
         }
 
-        private void GetItems<T, U>(string configName, ConvertFromJsonTokenToItem convert, List<IItem> allItems) where T : IItem
+        private void GetItems<T, TU>(string configName, ConvertFromJsonTokenToItem convert, List<IItem> allItems) where T : IItem
         {
-            var bulletsPath = Path.Combine
+            var itemsPath = Path.Combine
             (
                 _configsFullPath,
                 configName + ".json"
             );
 
-            var items =  JsonItemsLoader.LoadItems
+            var items =  JsonItemsLoader.LoadItems<TU>
             (
-                bulletsPath,
-                typeof(U),
+                itemsPath,
                 convert
             );
 
-            var handler = new ItemsTypesHandler<T>(items.Cast<T>()); 
+            var enumerable = items.ToList();
+            var handler = new ItemsTypesHandler<T>(enumerable.Cast<T>()); 
 
             Container.Bind<ItemsTypesHandler<T>>().FromInstance(handler).AsCached();
             
-            allItems.AddRange(items);
+            allItems.AddRange(enumerable);
         }
 
         private IItem BulletConvert(object jsonObject)
@@ -84,10 +83,10 @@ namespace Plugins.Inventory.Scripts.Item
             
             return new BulletItem
             (
-                id: jsonItem.id,
-                maxAmount: jsonItem.maxAmount,
-                weight: jsonItem.weight,
-                icon: _spritesHandler.GetSprite(jsonItem.iconName)
+                id: jsonItem.Id,
+                maxAmount: jsonItem.MaxAmount,
+                weight: jsonItem.Weight,
+                icon: _spritesHandler.GetSprite(jsonItem.IconName)
             );
         }
 
@@ -97,12 +96,12 @@ namespace Plugins.Inventory.Scripts.Item
             
             return new WeaponItem
             (
-                id: jsonItem.id,
+                id: jsonItem.Id,
                 maxAmount: 1,
-                damage: jsonItem.damage,
-                bulletsId: jsonItem.bulletsId,
-                weight: jsonItem.weight,
-                icon: _spritesHandler.GetSprite(jsonItem.iconName)
+                damage: jsonItem.Damage,
+                bulletsId: jsonItem.BulletsId,
+                weight: jsonItem.Weight,
+                icon: _spritesHandler.GetSprite(jsonItem.IconName)
             );
         }
 
@@ -112,11 +111,11 @@ namespace Plugins.Inventory.Scripts.Item
             
             return new BodyItem
             (
-                id: jsonItem.id,
+                id: jsonItem.Id,
                 maxAmount: 1,
-                defence: jsonItem.defence,
-                weight: jsonItem.weight,
-                icon: _spritesHandler.GetSprite(jsonItem.iconName)
+                defence: jsonItem.Defence,
+                weight: jsonItem.Weight,
+                icon: _spritesHandler.GetSprite(jsonItem.IconName)
             );
         }
 
@@ -126,11 +125,11 @@ namespace Plugins.Inventory.Scripts.Item
 
             return new HeadItem
             (
-                id: jsonItem.id,
+                id: jsonItem.Id,
                 maxAmount: 1,
-                defence: jsonItem.defence,
-                weight: jsonItem.weight,
-                icon: _spritesHandler.GetSprite(jsonItem.iconName)
+                defence: jsonItem.Defence,
+                weight: jsonItem.Weight,
+                icon: _spritesHandler.GetSprite(jsonItem.IconName)
             );
         }
     }

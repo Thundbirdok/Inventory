@@ -4,7 +4,11 @@ namespace Plugins.Inventory.Scripts.Item.ItemTypes
     using Plugins.Inventory.Scripts.Item.ItemInterfaces;
     using UnityEngine;
 
-    public class BulletItem : IItem, ILimitedStackItem, IItemWithIcon, IItemWithWeight
+    public class BulletItem : 
+        IItem,
+        ILimitedStackItem,
+        IItemWithIcon,
+        IItemWithWeight
     {
         public int Id { get; }
 
@@ -24,11 +28,15 @@ namespace Plugins.Inventory.Scripts.Item.ItemTypes
     }
 
     [Serializable]
-    public class BulletJsonItem
+    public class BulletJsonItem : 
+        IJsonItem,
+        IJsonLimitedStackItem,
+        IJsonItemWithIcon,
+        IJsonItemWithWeight
     {
-        public int id;
-        public string iconName;
-        public int maxAmount;
-        public float weight;
+        public int Id { get; set; }
+        public int MaxAmount { get; set; }
+        public string IconName { get; set; }
+        public float Weight { get; set; }
     }
 }

@@ -1,16 +1,18 @@
 [
   {
-    "id": 3,
-    "iconName": "Pistol",
-    "BulletsId": 1,
+    "Id": 3,
+    "MaxAmount": 1,
+    "IconName": "Pistol",
+    "Weight": 1.0,
     "Damage": 10,
-    "Weight": 1
+    "BulletsId": 1
   },
   {
-    "id": 4,
-    "iconName": "AK47",
-    "BulletsId": 2,
+    "Id": 4,
+    "MaxAmount": 1,
+    "IconName": "AK47",
+    "Weight": 5.0,
     "Damage": 20,
-    "Weight": 5
+    "BulletsId": 2
   }
 ]

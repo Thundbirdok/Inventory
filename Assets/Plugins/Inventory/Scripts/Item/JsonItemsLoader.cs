@@ -2,7 +2,6 @@ using UnityEngine;
 
 namespace Plugins.Inventory.Scripts.Item
 {
-    using System;
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
@@ -11,16 +10,15 @@ namespace Plugins.Inventory.Scripts.Item
 
     public static class JsonItemsLoader
     {
-        public static IEnumerable<IItem> LoadItems
+        public static IEnumerable<IItem> LoadItems<T>
         (
             string jsonPath,
-            Type jsonObject,
             InventoryItemsInstaller.ConvertFromJsonTokenToItem convert
         )
         {
             var jArray = GetJToken(jsonPath);
 
-            return jArray?.Select(jToken => jToken.ToObject(jsonObject))
+            return jArray?.Select(jToken => jToken.ToObject<T>())
                 .Select
                 (
                     jsonItem => convert(jsonItem)

@@ -4,4 +4,9 @@ namespace Plugins.Inventory.Scripts.Item.ItemInterfaces
     {
         public int Id { get; }
     }
+    
+    public interface IJsonItem
+    {
+        public int Id { get; set; }
+    }
 }

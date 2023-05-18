@@ -1,14 +1,16 @@
 [
   {
-    "id": 7,
-    "iconName": "Cap",
-    "defence": 3,
-    "weight": 0.1
+    "Id": 7,
+    "MaxAmount": 1,
+    "IconName": "Cap",
+    "Weight": 1.0,
+    "Defence": 3
   },
   {
-    "id": 8,
-    "iconName": "CombatHelmet",
-    "defence": 10,
-    "weight": 1
+    "Id": 8,
+    "MaxAmount": 1,
+    "IconName": "CombatHelmet",
+    "Weight": 10.0,
+    "Defence": 10
   }
 ]

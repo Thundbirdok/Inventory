@@ -4,7 +4,12 @@ namespace Plugins.Inventory.Scripts.Item.ItemTypes
     using Plugins.Inventory.Scripts.Item.ItemInterfaces;
     using UnityEngine;
 
-    public class HeadItem : IItem, ILimitedStackItem, IItemWithIcon, IItemWithWeight, IArmorItem
+    public class HeadItem : 
+        IItem,
+        ILimitedStackItem,
+        IItemWithIcon,
+        IItemWithWeight,
+        IArmorItem
     {
         public int Id { get; }
 
@@ -27,11 +32,17 @@ namespace Plugins.Inventory.Scripts.Item.ItemTypes
     }
 
     [Serializable]
-    public class HeadJsonItem
+    public class HeadJsonItem : 
+        IJsonItem,
+        IJsonLimitedStackItem,
+        IJsonItemWithIcon,
+        IJsonItemWithWeight,
+        IJsonArmorItem
     {
-        public int id;
-        public string iconName;
-        public int defence;
-        public float weight;
+        public int Id { get; set; }
+        public int MaxAmount { get; set; }
+        public string IconName { get; set; }
+        public float Weight { get; set; }
+        public int Defence { get; set; }
     }
 }

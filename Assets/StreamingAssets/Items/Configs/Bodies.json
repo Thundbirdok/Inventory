@@ -1,14 +1,16 @@
 [
   {
-    "id": 5,
-    "iconName": "Jacket",
-    "defence": 3,
-    "weight": 1
+    "Id": 5,
+    "IconName": "Jacket",
+    "MaxAmount": 1,
+    "Weight": 1.0,
+    "Defence": 3
   },
   {
-    "id": 6,
-    "iconName": "BodyArmor",
-    "defence": 10,
-    "weight": 10
+    "Id": 6,
+    "IconName": "BodyArmor",
+    "MaxAmount": 1,
+    "Weight": 10.0,
+    "Defence": 10
   }
 ]
